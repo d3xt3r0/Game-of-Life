@@ -1,5 +1,6 @@
 from json.tool import main
 import random
+from tkinter.tix import COLUMN
 
 
 def dead_state(width, height):
@@ -30,8 +31,21 @@ def random_state(width, height):
             state[i][j] = cell_state
     return state
 
-    
 
+def render(state):
+    print("-"+(len(state[0])+1)*2*'-')  # not very cool way to get the symmetry
+    for row in range(len(state)):
+        print("|",end=" ")
+        for colum in range(len(state[row])):
+
+            if state[row][colum] == 1:
+                state[row][colum] = "◼"
+            else:
+                state[row][colum] = "*"
+
+            print(state[row][colum], end=" ")
+        print("|")
+    print("-"+(len(state[0])+1)*2*'-')
 
 if __name__ == "__main__":
-    print(random_state(3,4))
+    render(random_state(12,3))
