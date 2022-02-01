@@ -1,5 +1,5 @@
-from json.tool import main
 import random
+import time
 
 
 def dead_state(width, height):
@@ -24,7 +24,7 @@ def random_state(width, height):
     for i in range(height):
         for j in range(width):
             random_number = random.random()
-            if random_number >= 0.5:
+            if random_number > 0.75:
                 cell_state = 1
             else:
                 cell_state = 0
@@ -124,9 +124,6 @@ def next_cell_value(cell, state):
             return 0    
 
 
-
-
-
 def render(state):
 
     '''
@@ -135,19 +132,29 @@ def render(state):
         Output: Printing the state graphically
     '''
 
-    print("-"+(len(state[0])+1)*2*'-')  # not very cool way to get the symmetry while printing
-    for row in range(len(state)):
-        print("|",end=" ")
-        for colum in range(len(state[row])):
-
-            if state[row][colum] == 1:
-                state[row][colum] = "◼"
-            else:
-                state[row][colum] = "*"
-
-            print(state[row][colum], end=" ")
-        print("|")
-    print("-"+(len(state[0])+1)*2*'-')
+    display_as = {
+        0: ' ',
+        # This is "unicode" for a filled-in square. You can also just use a thick
+        # "ASCII" character like a '$' or '#'.
+        1: u"\u2588"
+    }
+    lines = []
+    for x in range(0, len(state)):
+        line = ''
+        for y in range(0, len(state[0])):
+            line += display_as[state[x][y]] * 2
+        lines.append(line)
+    print ("\n".join(lines))
 
 if __name__ == "__main__":
-    render(random_state(12,3))
+    
+    init_state = random_state(50,50)
+    
+    # temp = next_board_state(init_state)
+    # print(temp)
+    #print the states in a loop
+    temp = init_state
+    while True:
+         render(temp)
+         temp = next_board_state(init_state)
+         time.sleep(.5)
