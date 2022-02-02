@@ -80,9 +80,11 @@ def next_cell_value(cell, state):
             traverse the top row.
         '''
         if x1>=height:
-            x1 = 0
+            #x1 = 0
+            continue
         elif x1<0:
-            x1 = height-1
+            #x1 = height-1
+            continue
 
         #Loop from left column to right column adjuscent to the cell
         for y1 in range(y-1,y+2):
@@ -93,9 +95,11 @@ def next_cell_value(cell, state):
             '''
 
             if y1>=width:
-                y1 = 0
+                #y1 = 0
+                continue
             elif y1<0:
-                y1 = width-1
+                #y1 = width-1
+                continue
 
 
             #Check if the cell traversing is the cell that we are finding neighbours to.
@@ -108,7 +112,6 @@ def next_cell_value(cell, state):
 
                 if state[x1][y1] == 1:
                     live_neighbors +=1
-
 
     if state[x][y] == 1:
 
@@ -146,15 +149,43 @@ def render(state):
         lines.append(line)
     print ("\n".join(lines))
 
+
+def load_board_state(file_path):
+
+    '''
+    Reads input from file and returns state
+    '''
+
+    state = []
+    item_list = []
+    with open(file_path, 'r') as f:
+        item_list = f.readlines()
+    
+    #Convert to a 2D list
+    for item in item_list:
+        list_item = list(item)
+        
+        #Remove newline
+        try:
+            list_item.remove("\n")
+        except ValueError:
+            pass
+        
+        num_list = [ int(x) for x in list_item ]
+
+        state.append(num_list)
+
+    return state
+
+
 if __name__ == "__main__":
     
-    init_state = random_state(50,50)
+    init_state = load_board_state("./glider.txt")
+    #init_state = random_state(3,3)
     
-    # temp = next_board_state(init_state)
-    # print(temp)
-    #print the states in a loop
-    temp = init_state
+    
+    print(next_board_state(init_state))
     while True:
-         render(temp)
-         temp = next_board_state(init_state)
-         time.sleep(.5)
+         render(init_state)
+         init_state = next_board_state(init_state)
+         time.sleep(.3)
